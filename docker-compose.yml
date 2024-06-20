@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  chess-club-web:
+    build: .
+    volumes:
+      - ./:/app
+      -  /app/node_modules
+    environment:
+      - NODE_ENV=development  
+    env_file:
+      - .env
+    ports:
+      - 5173:5173
