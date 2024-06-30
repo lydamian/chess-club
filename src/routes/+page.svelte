@@ -11,6 +11,7 @@
 </script>
 
 <div class="px-4 sm:px-6 lg:px-8">
+  <!-- leaderboard -->
   <div class="overflow-x-auto">
     <table class="table">
       <!-- head -->
@@ -33,4 +34,6 @@
       </tbody>
     </table>
   </div>
+
+  <!-- @TODO: implement most recent n games played of all users -->
 </div>
