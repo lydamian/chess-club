@@ -126,7 +126,7 @@
     </nav>
     <header class="py-10">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-white">Dashboard</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-white">Leaderboard</h1>
       </div>
     </header>
   </div>
@@ -135,6 +135,7 @@
     <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
       <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
         <!-- Your content -->
+        <slot />
       </div>
     </div>
   </main>

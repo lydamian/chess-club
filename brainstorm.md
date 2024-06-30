@@ -1,14 +1,13 @@
 we need the ability to create admin user's to
 be able to edit a user's score
 
-player
+user
 - id uuid auto generated
-- name
-- joined_at (date)
-- email
-- score
+- name text unique
+- email text unique
 - status (active, inactive, banned, deleted)
 - rank (default 1500)
+- created_at (date)
 
 games
 - player_1_id
@@ -48,3 +47,7 @@ what if we allowd users to create games and submit the results, then we can have
 -> also we need a discord integration and channel so that user's can
 submit games that we might have not recorded and an admin can
 add it asyncly
+
+
+in the leaderboard can we also create a row for the number
+and for the first, second, and third position lets add a gold trophy, silver, and bronze respectively
