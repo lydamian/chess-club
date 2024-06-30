@@ -1,10 +1,12 @@
 <script>
   import "tailwindcss/tailwind.css";
+  // import ChessClubLogo from "$src/components/chess-club-logo-v1.svelte";
+  import GoldChessLogo from "$src/lib/assets/images/gold-chess-logo.png";
 </script>
 
 <style>
   .bg-temp {
-    background-color: #BDD9BF;
+    background-color: #151E3F;
   }
 </style>
 <div
@@ -14,21 +16,22 @@
     text-base-content
   "
 >
-  <div class="bg-primary pb-32">
-    <nav class="bg-primary">
+  <div class="bg-temp pb-32">
+    <nav class="bg-temp">
       <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="border-b">
           <div class="flex h-16 items-center justify-between px-4 sm:px-0">
             <div class="flex items-center">
               <div class="flex-shrink-0">
                 <a href="/">
-                  <img class="h-8 w-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                  <!-- <img class="h-8 w-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"> -->
+                  <img class="h-48 w-auto" src={GoldChessLogo} alt="Your Company">
                 </a>
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
                   <!-- Current: "bg-secondary text-secondary-content", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                  <a href="#" class="rounded-md bg-secondary text-secondary-content px-3 py-2  font-medium text-white" aria-current="page">Dashboard</a>
+                  <a href="#" class="rounded-md bg-primary text-secondary-content px-3 py-2  font-medium text-white" aria-current="page">Dashboard</a>
                   <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
                   <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
                   <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a>
@@ -139,8 +142,10 @@
   <main class="-mt-32">
     <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
       <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <button class="btn bg-accent text-white m-4">Button</button>
         <!-- Your content -->
         <slot />
+        <button class="btn bg-primary text-white m-4">Button</button>
       </div>
     </div>
   </main>
