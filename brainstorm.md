@@ -88,3 +88,7 @@ i cant submit new games for them but all their old games are still active
 
 For now lets just allow inserting games, and dont worry about mutting just yet...
 
+
+
+
+Trophy icon https://icon-sets.iconify.design/noto/trophy/
