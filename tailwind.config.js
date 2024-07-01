@@ -2,7 +2,11 @@
 export default {
   content: ['./src/**/*.{html,svelte,js,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'midnightblue': '#151E3F',
+      },
+    },
   },
   plugins: [
     // Make sure you require daisyui AFTER @tailwindcss/typography in tailwind.config.js

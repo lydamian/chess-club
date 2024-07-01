@@ -1,41 +1,41 @@
 <script>
   import "tailwindcss/tailwind.css";
+  import GoldChessLogo from "$src/lib/assets/images/gold-chess-logo.png";
 </script>
 
-<!--
-  This example requires updating your template:
-
-  ```
-  <html class="h-full bg-gray-100">
-  <body class="h-full">
-  ```
--->
-<div class="min-h-full">
-  <div class="bg-gray-800 pb-32">
-    <nav class="bg-gray-800">
+<div
+  class="
+    min-h-full
+    bg-slate-100
+    text-base-content
+  "
+>
+  <div class="bg-midnightblue pb-32">
+    <nav class="bg-midnightblue">
       <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="border-b border-gray-700">
+        <div class="border-b">
           <div class="flex h-16 items-center justify-between px-4 sm:px-0">
             <div class="flex items-center">
               <div class="flex-shrink-0">
                 <a href="/">
-                  <img class="h-8 w-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                  <!-- <img class="h-8 w-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"> -->
+                  <img class="h-48 w-auto" src={GoldChessLogo} alt="Your Company">
                 </a>
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
-                  <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                  <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Dashboard</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Reports</a>
+                  <!-- Current: "bg-secondary text-secondary-content", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                  <a href="#" class="rounded-md bg-primary text-secondary-content px-3 py-2  font-medium text-white" aria-current="page">Dashboard</a>
+                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-secondary hover:white">Team</a>
+                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-secondary hover:text-white">Projects</a>
+                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-secondary hover:text-white">Calendar</a>
+                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-secondary hover:text-white">Reports</a>
                 </div>
               </div>
             </div>
             <div class="hidden md:block">
               <div class="ml-4 flex items-center md:ml-6">
-                <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                <button type="button" class="relative rounded-full bg-midnightblue p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span class="absolute -inset-1.5"></span>
                   <span class="sr-only">View notifications</span>
                   <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -136,8 +136,10 @@
   <main class="-mt-32">
     <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
       <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+        <button class="btn bg-accent text-white m-4">Button</button>
         <!-- Your content -->
         <slot />
+        <button class="btn bg-primary text-white m-4">Button</button>
       </div>
     </div>
   </main>

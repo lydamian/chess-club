@@ -30,16 +30,24 @@
         {#each data.users as user, i}
           {@const pos = i + 1}
 
-          <tr id={user.id}>
+          <tr
+            id={user.id}
+            class={`
+              ${pos === 1 ? 'bg-slate-300' : ''}
+              ${pos === 2 ? 'bg-slate-200' : ''}
+              ${pos === 3 ? 'bg-slate-100' : ''}
+            `
+            }
+          >
             <!-- special rendering for the highest ranked user -->
             {#if pos === 1}
-              <td>{pos}&nbsp<GoldTrophy class="inline text-xl" /></td>
+              <td>{pos}&nbsp<GoldTrophy class="inline text-lg" /></td>
             <!-- special rendering for the second highest ranked user -->
             {:else if pos === 2}
-              <td>{pos}&nbsp<SilverTrophy class="inline text-xl" /></td>
+              <td>{pos}&nbsp<SilverTrophy class="inline text-lg" /></td>
             <!-- special rendering for the third highest ranked user -->
             {:else if pos === 3}
-              <td>{pos}&nbsp<BronzeTrophy class="inline text-xl" /></td>
+              <td>{pos}&nbsp<BronzeTrophy class="inline text-lg" /></td>
             {:else}
               <td>{pos}</td>
             {/if}
