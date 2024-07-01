@@ -51,7 +51,14 @@
             {:else}
               <td>{pos}</td>
             {/if}
-            <td>{user.name}</td>
+            <td>
+              <a
+                href={`users/${user.id}`}
+                class="link link-primary"
+              >
+                {user.name}
+              </a>
+            </td>
             <td>{user.rank}</td>
           </tr>
         {/each}
