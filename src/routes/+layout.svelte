@@ -1,6 +1,5 @@
 <script>
   import "tailwindcss/tailwind.css";
-  // import ChessClubLogo from "$src/components/chess-club-logo-v1.svelte";
   import GoldChessLogo from "$src/lib/assets/images/gold-chess-logo.png";
 </script>
 
