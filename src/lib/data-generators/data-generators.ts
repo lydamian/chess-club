@@ -1,16 +1,16 @@
 import { generateMock } from '@anatine/zod-mock';
 import type {
   User,
-  Game
+  Game,
 } from '$src/lib/schemas/schema';
 
 import {
-  userSchema,
-  gameSchema
+  UserSchema,
+  GameSchema,
 } from '$src/lib/schemas/schema';
 
 const generateMockUser = (): User => {
-  return generateMock(userSchema);
+  return generateMock(UserSchema);
 }
 
 const generateMockGame = (
@@ -18,13 +18,23 @@ const generateMockGame = (
   userId2: string
 ): Game => {
   return {
-    ...generateMock(gameSchema),
-    user_1_id: userId1,
-    user_2_id: userId2,
+    ...generateMock(GameSchema),
   };
 }
 
+// const generateMockGameJoinUsers = (
+//   userId1: string,
+//   userId2: string
+// ): Game => {
+//   return {
+//     ...generateMock(gameJoinUsersSchema),
+//     user_1_id: userId1,
+//     user_2_id: userId2,
+//   };
+// }
+
 export {
   generateMockUser,
-  generateMockGame
+  generateMockGame,
+  // generateMockGameJoinUsers,
 }

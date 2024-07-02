@@ -92,3 +92,72 @@ For now lets just allow inserting games, and dont worry about mutting just yet..
 
 
 Trophy icon https://icon-sets.iconify.design/noto/trophy/
+
+
+import { z } from 'zod';
+
+// Define the Game schema
+const GameSchema = z.object({
+  id: z.string().uuid(),
+  metadata: z.object({}).optional(), // Assuming metadata is a JSON object
+  winner_id: z.string().uuid(),
+  winner_color: z.enum(['white', 'black']),
+  played_at: z.string().datetime(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+// Define the Player schema
+const PlayerSchema = z.object({
+  game_id: z.string().uuid(),
+  user_id: z.string().uuid(),
+  color: z.enum(['white', 'black']),
+  rank_at_time_of_play: z.number(),
+});
+
+// Define the Opponent schema by prepending 'opponent_' to the Player schema fields
+const OpponentSchema = PlayerSchema.extend({
+  opponent_game_id: PlayerSchema.shape.game_id,
+  opponent_user_id: PlayerSchema.shape.user_id,
+  opponent_color: PlayerSchema.shape.color,
+  opponent_rank_at_time_of_play: PlayerSchema.shape.rank_at_time_of_play,
+}).omit({
+  game_id: true,
+  user_id: true,
+  color: true,
+  rank_at_time_of_play: true,
+});
+
+// Combine the schemas to create the final schema
+const UserGameDetailsSchema = GameSchema.extend({
+  player: PlayerSchema,
+  opponent: OpponentSchema,
+});
+
+export { UserGameDetailsSchema };
+
+
+SELECT
+    u.name AS user_name,
+    gp.rank_at_time_of_play AS user_rank_at_time_of_play,
+    gp.color AS user_color,
+    opponent.id AS opponent_id,
+    opponent.name AS opponent_name,
+    opponent_gp.color AS opponent_color,
+    opponent_gp.rank_at_time_of_play AS opponent_rank_at_time_of_play,
+    CASE
+        WHEN games.winner_id = gp.user_id THEN 'win'
+        WHEN games.winner_id = opponent_gp.user_id THEN 'loss'
+        ELSE 'draw'
+    END AS result,
+    games.played_at
+FROM
+    game_players gp
+    JOIN users u ON gp.user_id = u.id
+    JOIN games ON gp.game_id = games.id
+    JOIN game_players opponent_gp ON games.id = opponent_gp.game_id AND gp.user_id <> opponent_gp.user_id
+    JOIN users opponent ON opponent_gp.user_id = opponent.id
+WHERE
+    gp.user_id = 'your_user_id_here'
+ORDER BY
+    games.played_at DESC;

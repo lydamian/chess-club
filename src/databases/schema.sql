@@ -7,6 +7,11 @@ CREATE TYPE user_status AS ENUM (
   'deleted'
 );
 
+-- Enum type for player color
+CREATE TYPE player_color AS ENUM ('white', 'black');
+
+CREATE TYPE game_result AS ENUM ('win', 'loss', 'draw');
+
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT UNIQUE NOT NULL,
@@ -17,13 +22,24 @@ CREATE TABLE users (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+
 CREATE TABLE games (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_1_id UUID REFERENCES users(id),
-  user_2_id UUID REFERENCES users(id),
   metadata JSONB,
   winner_id UUID REFERENCES users(id),
+  winner_color player_color,
   played_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE game_players (
+  game_id UUID REFERENCES games(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  color player_color NOT NULL,
+  rank_at_time_of_play INTEGER,
+  game_result game_result NOT NULL,
+  PRIMARY KEY (game_id, user_id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -45,5 +61,10 @@ EXECUTE PROCEDURE update_updated_at_column();
 
 CREATE TRIGGER update_games_updated_at
 BEFORE UPDATE ON games
+FOR EACH ROW
+EXECUTE PROCEDURE update_updated_at_column();
+
+CREATE TRIGGER game_players_updated_at
+BEFORE UPDATE ON game_players
 FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();

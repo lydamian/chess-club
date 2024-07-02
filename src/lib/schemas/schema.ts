@@ -8,10 +8,10 @@ const userStatusEnum = z.enum([
 ]);
 
 const Color = z.enum(['white', 'black']);
-
 const Rank = z.number().int().gt(0).lt(4000);
+const GameResult = z.enum(['win', 'loss', 'draw']);
 
-const userSchema = z.object({
+const UserSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   email_address: z.string().email(),
@@ -21,36 +21,55 @@ const userSchema = z.object({
   updated_at: z.date(),
 });
 
-
-const gameMetadataSchema = z.object({
-  white: z.string().uuid(),
-  black: z.string().uuid(),
-});
-
-const gameSchema = z.object({
+const GameSchema = z.object({
   id: z.string().uuid(),
-  user_1_id: z.string(),
-  user_2_id: z.string(),
-  metadata: gameMetadataSchema.optional(),
-  user_1_color: Color,
-  user_2_color: Color,
-  user_1_start_rank: Rank,
-  user_2_start_rank: Rank,
-  winner_id: z.string(),
-  created_at: z.date(),
-  updated_at: z.date(),
+  metadata: z.object({}).optional(), // Assuming metadata is a JSON object
+  winner_id: z.string().uuid(),
+  winner_color: Color,
+  played_at: z.string().datetime(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
 });
+
+// Define the Player schema
+const PlayerSchema = z.object({
+  game_id: z.string().uuid(),
+  user_id: z.string().uuid(),
+  color: z.enum(['white', 'black']),
+  rank_at_time_of_play: z.number(),
+  game_result: GameResult,
+});
+
+// Define the Opponent schema by prepending 'opponent_' to the Player schema fields
+const OpponentSchema = z.object({
+  opponent_user_id: PlayerSchema.shape.user_id,
+  opponent_color: PlayerSchema.shape.color,
+  opponent_rank_at_time_of_play: PlayerSchema.shape.rank_at_time_of_play,
+  opponent_game_result: GameResult,
+})
+
+// Combine the schemas to create the final schema
+const UserGameDetailsSchema = GameSchema.extend({
+  player: PlayerSchema,
+  opponent: OpponentSchema,
+});
+
 
 // types inference
-type User = z.infer<typeof userSchema>
-type Game = z.infer<typeof gameSchema>
+type User = z.infer<typeof UserSchema>
+type Game = z.infer<typeof GameSchema>
+type GameDetails = z.infer<typeof UserGameDetailsSchema>
 
 export {
-  userSchema,
-  gameSchema,
+  UserSchema,
+  GameSchema,
+  PlayerSchema,
+  OpponentSchema,
+  UserGameDetailsSchema,
 }
 
 export type {
   User,
   Game,
+  GameDetails
 }
