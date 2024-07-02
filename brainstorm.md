@@ -161,3 +161,5 @@ WHERE
     gp.user_id = 'your_user_id_here'
 ORDER BY
     games.played_at DESC;
+
+Mabye I should also keep track of the new scores for each user after the game was played but i will deal with that later
