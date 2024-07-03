@@ -150,7 +150,7 @@ SELECT
         WHEN games.winner_id = opponent_gp.user_id THEN 'loss'
         ELSE 'draw'
     END AS result,
-    games.played_at
+    games.created_at
 FROM
     game_players gp
     JOIN users u ON gp.user_id = u.id
@@ -160,6 +160,6 @@ FROM
 WHERE
     gp.user_id = 'your_user_id_here'
 ORDER BY
-    games.played_at DESC;
+    games.created_at DESC;
 
 Mabye I should also keep track of the new scores for each user after the game was played but i will deal with that later

@@ -26,7 +26,6 @@ const GameSchema = z.object({
   metadata: z.object({}).optional(), // Assuming metadata is a JSON object
   winner_id: z.string().uuid(),
   winner_color: Color,
-  played_at: z.string().datetime(),
   created_at: z.string().datetime(),
   updated_at: z.string().datetime(),
 });
