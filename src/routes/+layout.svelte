@@ -3,6 +3,7 @@
   import GoldChessLogo from "$src/lib/assets/images/gold-chess-logo.png";
   import { page } from '$app/stores';
 	import { browser } from "$app/environment";
+  import { onMount } from 'svelte';
 
   if (browser) {
     console.log('browser');
@@ -14,9 +15,16 @@
     { name: 'Admin', href: '/admin' },
   ];
 
-  console.log('browser');
-  console.log(JSON.stringify($page.url.pathname));
   let mobileNavbarOpen = false;
+
+  onMount(() => {
+    const unsubscribe = page.subscribe(() => {
+      mobileNavbarOpen = false;
+    });
+
+    return unsubscribe;
+  });
+
 </script>
 
 <div
