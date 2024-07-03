@@ -1,6 +1,22 @@
 <script>
   import "tailwindcss/tailwind.css";
   import GoldChessLogo from "$src/lib/assets/images/gold-chess-logo.png";
+  import { page } from '$app/stores';
+	import { browser } from "$app/environment";
+
+  if (browser) {
+    console.log('browser');
+    console.log(JSON.stringify($page));
+  }
+
+  const navigation = [
+    { name: 'Leaderboard', href: '/' },
+    { name: 'Admin', href: '/admin' },
+  ];
+
+  console.log('browser');
+  console.log(JSON.stringify($page.url.pathname));
+
 </script>
 
 <div
@@ -25,11 +41,15 @@
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
                   <!-- Current: "bg-accent text-secondary-content", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                  <a href="#" class="rounded-md bg-primary text-secondary-content px-3 py-2  font-medium text-white" aria-current="page">Dashboard</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-accent hover:white">Team</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-accent hover:text-white">Projects</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-accent hover:text-white">Calendar</a>
-                  <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-accent hover:text-white">Reports</a>
+                  {#each navigation as item}
+                    <a
+                      href={item.href}
+                      class={$page.url.pathname === item.href ? 'rounded-md bg-primary text-secondary-content px-3 py-2 font-medium text-white': 'rounded-md px-3 py-2 font-medium text-white hover:bg-accent hover:white'}
+                      aria-current="page"
+                    >
+                      {item.name}
+                    </a>
+                  {/each}
                 </div>
               </div>
             </div>
@@ -95,11 +115,15 @@
       <div class="border-b border-gray-700 md:hidden" id="mobile-menu">
         <div class="space-y-1 px-2 py-3 sm:px-3">
           <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-          <a href="#" class="block rounded-md bg-primary px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
-          <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Team</a>
-          <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Projects</a>
-          <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Calendar</a>
-          <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Reports</a>
+          {#each navigation as item}
+            <a
+              href={item.href}
+              class={$page.url.pathname === item.href ? 'block rounded-md bg-primary px-3 py-2 text-base font-medium text-white': 'block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white'}
+              aria-current="page"
+            >
+              {item.name}
+            </a>
+          {/each}
         </div>
         <div class="border-t border-gray-700 pb-3 pt-4">
           <div class="flex items-center px-5">
