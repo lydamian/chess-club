@@ -3,7 +3,6 @@
   import SilverTrophy from '$src/components/silver-trophy.svelte'
   import BronzeTrophy from '$src/components/bronze-trophy.svelte'
   import {
-    generateMockGame,
     generateMockUser,
   } from '$lib/data-generators/data-generators';
 

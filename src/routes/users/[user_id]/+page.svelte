@@ -1,16 +1,16 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { generateMockGameJoinUsers } from '$lib/data-generators/data-generators';
-	import type  { GameJoinUsers } from '$lib/schemas/schema';
+	import { generateGameDetails } from '$lib/data-generators/data-generators';
+	import type  { GameDetails } from '$lib/schemas/schema';
 
 	type Data = PageData & {
 		// GET /api/users
-		games: GameJoinUsers[];
+		games: GameDetails[];
 	};
 
-	export let data: Data = {
+	let data: Data = {
 		// GET /api/users
-		games: Array.from({ length: 10 }, (_, i) => generateMockGameJoinUsers("0", "1")),
+		games: Array.from({ length: 10 }, (_, i) => (generateGameDetails())),
 	};
 
 </script>
@@ -84,45 +84,21 @@ Be able to search a user, I actually think i may not need this (since it should 
 			<thead>
 				<tr>
 					<th></th>
+					<th>Played as</th>
 					<th>Played against</th>
-					<th></th>
-					<th>Favorite Color</th>
+					<th>Result</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- loop through all games and display table row -->
 				{#each data.games as game, i}
-					{@const userInfo = game.metadata.users[game.user_1_id]}
-					{@const opponentInfo = game.metadata.users[game.user_2_id]}
 					<tr>
 						<td>{i + 1}</td>
-						<td>{game.opponent}</td>
-						<td>{game.metadata.users[game.user_1_id].game_outcome}</td>
-						<td>{game.played_at}</td>
+						<td>{`${game.user_name} (${game.color})`}</td>
+						<td>{`${game.opponent_name} (${game.opponent_color})`}</td>
+						<td>{game.game_result}</td>
 					</tr>
 				{/each}
-
-				<!-- row 1 -->
-				<tr>
-					<th>1</th>
-					<td>Cy Ganderton</td>
-					<td>Quality Control Specialist</td>
-					<td>Blue</td>
-				</tr>
-				<!-- row 2 -->
-				<tr>
-					<th>2</th>
-					<td>Hart Hagerty</td>
-					<td>Desktop Support Technician</td>
-					<td>Purple</td>
-				</tr>
-				<!-- row 3 -->
-				<tr>
-					<th>3</th>
-					<td>Brice Swyre</td>
-					<td>Tax Accountant</td>
-					<td>Red</td>
-				</tr>
 			</tbody>
 		</table>
 	</div>	

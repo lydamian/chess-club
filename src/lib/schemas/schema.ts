@@ -31,27 +31,28 @@ const GameSchema = z.object({
   updated_at: z.string().datetime(),
 });
 
-// Define the Player schema
-const PlayerSchema = z.object({
+const GamePlayer = z.object({
   game_id: z.string().uuid(),
   user_id: z.string().uuid(),
-  color: z.enum(['white', 'black']),
+  color: Color,
   rank_at_time_of_play: z.number(),
   game_result: GameResult,
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
 });
-
-// Define the Opponent schema by prepending 'opponent_' to the Player schema fields
-const OpponentSchema = z.object({
-  opponent_user_id: PlayerSchema.shape.user_id,
-  opponent_color: PlayerSchema.shape.color,
-  opponent_rank_at_time_of_play: PlayerSchema.shape.rank_at_time_of_play,
-  opponent_game_result: GameResult,
-})
 
 // Combine the schemas to create the final schema
 const UserGameDetailsSchema = GameSchema.extend({
-  player: PlayerSchema,
-  opponent: OpponentSchema,
+  user_id: z.string().uuid(),
+  user_name: z.string(),
+  color: Color,
+  rank_at_time_of_play: z.number(),
+  game_result: GameResult,
+  opponent_user_id: z.string().uuid(),
+  opponent_name: z.string(),
+  opponent_color: Color,
+  opponent_rank_at_time_of_play: z.number(),
+  opponent_game_result: GameResult,
 });
 
 
@@ -63,8 +64,7 @@ type GameDetails = z.infer<typeof UserGameDetailsSchema>
 export {
   UserSchema,
   GameSchema,
-  PlayerSchema,
-  OpponentSchema,
+  GamePlayer,
   UserGameDetailsSchema,
 }
 
