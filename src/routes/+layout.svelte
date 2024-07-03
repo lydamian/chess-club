@@ -174,7 +174,7 @@
   </div>
 
   <main class="-mt-32">
-    <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl md:px-4 pb-12 sm:px-6 lg:px-8">
       <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
         <!-- Your content -->
         <slot />
