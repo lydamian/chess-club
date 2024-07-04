@@ -176,7 +176,13 @@
     </nav>
     <header class="py-10">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-white">Leaderboard</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-white">
+          {#each navigation as item}
+            {#if $page.url.pathname === item.href}
+              {item.name}
+            {/if}
+          {/each}
+        </h1>
       </div>
     </header>
   </div>

@@ -10,6 +10,7 @@ export default {
   },
   plugins: [
     // Make sure you require daisyui AFTER @tailwindcss/typography in tailwind.config.js
+    require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require('daisyui')
   ],
