@@ -7,15 +7,15 @@ const userStatusEnum = z.enum([
   'deleted'
 ]);
 
-const Color = z.enum(['white', 'black']);
-const Rank = z.number().int().gt(0).lt(4000);
-const GameResult = z.enum(['win', 'loss', 'draw']);
+const ColorSchena = z.enum(['white', 'black']);
+const RankSchema = z.number().int().gt(0).lt(4000);
+const GameResultSchema = z.enum(['win', 'loss', 'draw']);
 
 const UserSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
-  email_address: z.string().email(),
-  rank: Rank.default(1500),
+  email: z.string().email(),
+  rank: RankSchema.default(1500),
   status: userStatusEnum,
   created_at: z.date(),
   updated_at: z.date(),
@@ -24,8 +24,6 @@ const UserSchema = z.object({
 const GameSchema = z.object({
   id: z.string().uuid(),
   metadata: z.object({}).optional(), // Assuming metadata is a JSON object
-  winner_id: z.string().uuid(),
-  winner_color: Color,
   created_at: z.string().datetime(),
   updated_at: z.string().datetime(),
 });
@@ -33,9 +31,9 @@ const GameSchema = z.object({
 const GamePlayer = z.object({
   game_id: z.string().uuid(),
   user_id: z.string().uuid(),
-  color: Color,
+  color: ColorSchena,
   rank_at_time_of_play: z.number(),
-  game_result: GameResult,
+  game_result: GameResultSchema,
   created_at: z.string().datetime(),
   updated_at: z.string().datetime(),
 });
@@ -44,14 +42,14 @@ const GamePlayer = z.object({
 const UserGameDetailsSchema = GameSchema.extend({
   user_id: z.string().uuid(),
   user_name: z.string(),
-  color: Color,
+  color: ColorSchena,
   rank_at_time_of_play: z.number(),
-  game_result: GameResult,
+  game_result: GameResultSchema,
   opponent_user_id: z.string().uuid(),
   opponent_name: z.string(),
-  opponent_color: Color,
+  opponent_color: ColorSchena,
   opponent_rank_at_time_of_play: z.number(),
-  opponent_game_result: GameResult,
+  opponent_game_result: GameResultSchema,
 });
 
 
@@ -65,6 +63,9 @@ export {
   GameSchema,
   GamePlayer,
   UserGameDetailsSchema,
+  ColorSchena,
+  RankSchema,
+  GameResultSchema
 }
 
 export type {

@@ -17,7 +17,7 @@ export const actions = {
 	create_user: async ({ cookies, request }) => {
     const data = await request.formData();
     const name = data.get('name');
-    const email_address = data.get('email_address');
+    const email = data.get('email_address');
     const rank = data.get('rank') ?? 1500;
 
 
@@ -26,7 +26,7 @@ export const actions = {
       status: 200,
       data: {
         name,
-        email_address,
+        email,
         rank,
       } 
 	  };

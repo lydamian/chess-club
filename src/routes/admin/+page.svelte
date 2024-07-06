@@ -9,6 +9,15 @@
     { name: 'White', value: 'white' },
     { name: 'Black', value: 'black' },
   ];
+
+  let userForm = {
+    name: '',
+    email: '',
+    rank: 1500,
+  };
+
+  let players = [null, null];
+  $: console.log(players);
 </script>
 
 <div class="space-y-10 divide-y divide-gray-900/10">
@@ -40,21 +49,21 @@
           <div class="col-span-full">
             <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
             <div class="mt-2">
-              <input id="name" name="name" type="text" autocomplete="name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input bind:value={userForm.name} id="name" name="name" type="text" autocomplete="name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
           </div>
 
           <div class="col-span-full">
             <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
             <div class="mt-2">
-              <input id="email" name="email" type="email" autocomplete="email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input bind:value={userForm.email} id="email" name="email" type="email" autocomplete="email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
           </div>
 
           <div class="col-span-full">
-            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Rank</label>
+            <label for="rank" class="block text-sm font-medium leading-6 text-gray-900">Rank</label>
             <div class="mt-2">
-              <input id="rank" name="rank" type="number" value="1500" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input bind:value={userForm.rank} id="rank" name="rank" type="number" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
           </div>
         </div>
@@ -97,8 +106,25 @@
           <!-- user 1 -->
           <div class="col-span-full">
             <div class="relative mt-2">
-              <label for="user-1" class="block text-sm font-medium leading-6 text-gray-900">Player 1</label>
-              <select id="user-1" name="user-1" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <label
+                for="user-1"
+                class="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Player 1
+              </label>
+              <p
+                class="mt-2 text-sm text-gray-500"
+                id="email-description"
+              >
+                Dont see the user you are looking for?
+                <a class="link link-primary" href="#">Add a new user above</a>
+              </p>
+              <select
+                id="user-1"
+                name="user-1"
+                class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                bind:value={players[0]}
+              >
                 <option>Select a user</option>
                 {#each users as user}
                   <option value={user.id}>{user.name}</option>
@@ -122,8 +148,22 @@
             <!-- user 2 -->
             <div class="col-span-full">
               <div class="relative mt-2">
-                <label for="user-2" class="block text-sm font-medium leading-6 text-gray-900">Player 2</label>
-                <select id="user-2" name="user-2" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <label for="user-2" class="block text-sm font-medium leading-6 text-gray-900">
+                  Player 2
+                </label>
+                <p
+                  class="mt-2 text-sm text-gray-500"
+                  id="email-description"
+                >
+                  Dont see the user you are looking for?
+                  <a class="link link-primary" href="#">Add a new user above</a>
+                </p>
+                <select
+                  id="user-2"
+                  name="user-2"
+                  class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  bind:value={players[1]}
+                >
                   <option>Select a user</option>
                   {#each users as user}
                     <option value={user.id}>{user.name}</option>
@@ -151,7 +191,8 @@
               <label for="game-result" class="block text-sm font-medium leading-6 text-gray-900">Game Result</label>
               <select id="game-result" name="game-result" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 <option>Draw</option>
-                {#each users as user}
+                {#each users.filter((user) => user.id === players[0] || user.id === players[1])
+                  as user}
                   <option value={user.id}>{user.name}</option>
                 {/each}
               </select>

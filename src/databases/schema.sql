@@ -15,7 +15,7 @@ CREATE TYPE game_result AS ENUM ('win', 'loss', 'draw');
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT UNIQUE NOT NULL,
-  email_address TEXT UNIQUE NOT NULL,
+  email TEXT UNIQUE NOT NULL,
   status user_status DEFAULT 'active' NOT NULL,
   rank INTEGER DEFAULT 1500 NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
