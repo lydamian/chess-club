@@ -5,11 +5,6 @@
 	import { browser } from "$app/environment";
   import { onMount } from 'svelte';
 
-  if (browser) {
-    console.log('browser');
-    console.log(JSON.stringify($page));
-  }
-
   const navigation = [
     { name: 'Leaderboard', href: '/' },
     { name: 'Admin', href: '/admin' },
