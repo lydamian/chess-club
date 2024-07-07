@@ -71,6 +71,12 @@
     return unsubscribe;
   });
 
+	$: logout = async () => {
+		const { error } = await supabase.auth.signOut();
+		if (error) {
+			console.error(error);
+		}
+	};
 </script>
 
 <div
@@ -131,7 +137,9 @@
                       From: "transform opacity-100 scale-100"
                       To: "transform opacity-0 scale-95"
                   -->
-                  <div class="dropdown dropdown-bottom dropdown-end">
+                  <div
+                    class={`${session ? "": "hidden"} dropdown dropdown-bottom dropdown-end`};
+                  >
                     <div tabindex="0" role="button" class="">
                       <div class="">
                         <div>
@@ -144,7 +152,11 @@
                     </div>
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                       <li><a href="/admin/settings" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a></li>
-                      <li><a href="/admin/sign-out" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a></li>
+                      <li>
+                        <button on:click={logout} class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">
+                          Sign out
+                        </button>
+                      </li>
                     </ul>
                   </div>
 
@@ -216,7 +228,12 @@
           </div>
           <div class="mt-3 space-y-1 px-2">
             <a href="/admin/settings" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Settings</a>
-            <a href="/admin/sign-out" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Sign out</a>
+            <button
+              on:click={logout}
+              class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white"
+            >
+              Sign out
+            </button>
           </div>
         </div>
       </div>
