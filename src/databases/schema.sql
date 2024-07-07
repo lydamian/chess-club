@@ -26,8 +26,6 @@ CREATE TABLE users (
 CREATE TABLE games (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   metadata JSONB,
-  winner_id UUID REFERENCES users(id),
-  winner_color player_color,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -36,7 +34,8 @@ CREATE TABLE game_players (
   game_id UUID REFERENCES games(id) ON DELETE CASCADE,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   color player_color NOT NULL,
-  rank_at_time_of_play INTEGER,
+  rank_start INTEGER,
+  rank_end INTEGER,
   game_result game_result NOT NULL,
   PRIMARY KEY (game_id, user_id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,

@@ -32,7 +32,7 @@ const GamePlayer = z.object({
   game_id: z.string().uuid(),
   user_id: z.string().uuid(),
   color: ColorSchena,
-  rank_at_time_of_play: z.number(),
+  rank_start: z.number(),
   game_result: GameResultSchema,
   created_at: z.string().datetime(),
   updated_at: z.string().datetime(),
@@ -43,12 +43,12 @@ const UserGameDetailsSchema = GameSchema.extend({
   user_id: z.string().uuid(),
   user_name: z.string(),
   color: ColorSchena,
-  rank_at_time_of_play: z.number(),
+  rank_start: z.number(),
   game_result: GameResultSchema,
   opponent_user_id: z.string().uuid(),
   opponent_name: z.string(),
   opponent_color: ColorSchena,
-  opponent_rank_at_time_of_play: z.number(),
+  opponent_rank_start: z.number(),
   opponent_game_result: GameResultSchema,
 });
 

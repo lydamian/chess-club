@@ -112,7 +112,7 @@ const PlayerSchema = z.object({
   game_id: z.string().uuid(),
   user_id: z.string().uuid(),
   color: z.enum(['white', 'black']),
-  rank_at_time_of_play: z.number(),
+  rank_start: z.number(),
 });
 
 // Define the Opponent schema by prepending 'opponent_' to the Player schema fields
@@ -120,12 +120,12 @@ const OpponentSchema = PlayerSchema.extend({
   opponent_game_id: PlayerSchema.shape.game_id,
   opponent_user_id: PlayerSchema.shape.user_id,
   opponent_color: PlayerSchema.shape.color,
-  opponent_rank_at_time_of_play: PlayerSchema.shape.rank_at_time_of_play,
+  opponent_rank_start: PlayerSchema.shape.rank_start,
 }).omit({
   game_id: true,
   user_id: true,
   color: true,
-  rank_at_time_of_play: true,
+  rank_start: true,
 });
 
 // Combine the schemas to create the final schema
@@ -139,12 +139,12 @@ export { UserGameDetailsSchema };
 
 SELECT
     u.name AS user_name,
-    gp.rank_at_time_of_play AS user_rank_at_time_of_play,
+    gp.rank_start AS user_rank_start,
     gp.color AS user_color,
     opponent.id AS opponent_id,
     opponent.name AS opponent_name,
     opponent_gp.color AS opponent_color,
-    opponent_gp.rank_at_time_of_play AS opponent_rank_at_time_of_play,
+    opponent_gp.rank_start AS opponent_rank_start,
     CASE
         WHEN games.winner_id = gp.user_id THEN 'win'
         WHEN games.winner_id = opponent_gp.user_id THEN 'loss'
@@ -163,3 +163,63 @@ ORDER BY
     games.created_at DESC;
 
 Mabye I should also keep track of the new scores for each user after the game was played but i will deal with that later
+
+
+Given this postgres schema, please help me generate some fake data.
+Let me explain how this data model works.
+
+We have users stored in the users table.
+we can store games which have a one to many relationship with game_players.
+We are generally using this for a chess ranking app, so 1 game will generally map to two game_players rows where there will be one winner denoted by the game_players.game_result and game_players.colors should be unique.
+
+Can we create two users named John Doe and Jane Doe.
+Lets create 3 games between there where john doe wins 1 and jane doe wins 2. They should both start at rank 1500, and a game win should update their rank +10 and a loss should decrease there rank -10.
+
+
+
+-- Insert two users
+INSERT INTO users (name, email, status, rank)
+VALUES 
+('John Doe', 'john.doe@example.com', 'active'::user_status, 1500),
+('Jane Doe', 'jane.doe@example.com', 'active'::user_status, 1500);
+
+-- Insert three games
+INSERT INTO games (metadata)
+VALUES 
+('{}'),
+('{}'),
+('{}');
+
+-- Get the IDs of the users and games
+WITH john_doe AS (
+  SELECT id FROM users WHERE name = 'John Doe'
+),
+jane_doe AS (
+  SELECT id FROM users WHERE name = 'Jane Doe'
+),
+game1 AS (
+  SELECT id FROM games LIMIT 1 OFFSET 0
+),
+game2 AS (
+  SELECT id FROM games LIMIT 1 OFFSET 1
+),
+game3 AS (
+  SELECT id FROM games LIMIT 1 OFFSET 2
+)
+-- Insert game players
+INSERT INTO game_players (game_id, user_id, color, rank_start, rank_end, game_result)
+SELECT game1.id, john_doe.id, 'white'::player_color, 1500, 1490, 'loss'::game_result FROM game1, john_doe
+UNION ALL
+SELECT game1.id, jane_doe.id, 'black'::player_color, 1500, 1510, 'win'::game_result FROM game1, jane_doe
+UNION ALL
+SELECT game2.id, john_doe.id, 'white'::player_color, 1490, 1500, 'win'::game_result FROM game2, john_doe
+UNION ALL
+SELECT game2.id, jane_doe.id, 'black'::player_color, 1510, 1500, 'loss'::game_result FROM game2, jane_doe
+UNION ALL
+SELECT game3.id, john_doe.id, 'white'::player_color, 1500, 1490, 'loss'::game_result FROM game3, john_doe
+UNION ALL
+SELECT game3.id, jane_doe.id, 'black'::player_color, 1500, 1510, 'win'::game_result FROM game3, jane_doe;
+
+-- Update the users' ranks
+UPDATE users SET rank = 1490 WHERE name = 'John Doe';
+UPDATE users SET rank = 1510 WHERE name = 'Jane Doe';

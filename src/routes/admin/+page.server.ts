@@ -53,7 +53,7 @@ export const actions = {
 		// 	game_id: 'game-1', // @TODO: get this from the created game above or in a tx
 		// 	user_id: user_1_id,
 		// 	color: user_1_color,
-		// 	rank_at_time_of_play: 1500,
+		// 	rank_start: 1500,
 		// 	game_result: game_result,
 		// 	created_at: new Date(),
 		// 	updated_at: new Date(),

@@ -40,3 +40,55 @@ You can preview the production build with `npm run preview`.
 ## Resources
 - Authentication
   - https://supabase.com/docs/guides/auth/server-side/sveltekit
+
+
+## Getting started
+Insert mock data
+```
+  -- Insert two users
+  INSERT INTO users (name, email, status, rank)
+  VALUES 
+  ('John Doe', 'john.doe@example.com', 'active'::user_status, 1500),
+  ('Jane Doe', 'jane.doe@example.com', 'active'::user_status, 1500);
+
+  -- Insert three games
+  INSERT INTO games (metadata)
+  VALUES 
+  ('{}'),
+  ('{}'),
+  ('{}');
+
+  -- Get the IDs of the users and games
+  WITH john_doe AS (
+    SELECT id FROM users WHERE name = 'John Doe'
+  ),
+  jane_doe AS (
+    SELECT id FROM users WHERE name = 'Jane Doe'
+  ),
+  game1 AS (
+    SELECT id FROM games LIMIT 1 OFFSET 0
+  ),
+  game2 AS (
+    SELECT id FROM games LIMIT 1 OFFSET 1
+  ),
+  game3 AS (
+    SELECT id FROM games LIMIT 1 OFFSET 2
+  )
+  -- Insert game players
+  INSERT INTO game_players (game_id, user_id, color, rank_start, rank_end, game_result)
+  SELECT game1.id, john_doe.id, 'white'::player_color, 1500, 1490, 'loss'::game_result FROM game1, john_doe
+  UNION ALL
+  SELECT game1.id, jane_doe.id, 'black'::player_color, 1500, 1510, 'win'::game_result FROM game1, jane_doe
+  UNION ALL
+  SELECT game2.id, john_doe.id, 'white'::player_color, 1490, 1500, 'win'::game_result FROM game2, john_doe
+  UNION ALL
+  SELECT game2.id, jane_doe.id, 'black'::player_color, 1510, 1500, 'loss'::game_result FROM game2, jane_doe
+  UNION ALL
+  SELECT game3.id, john_doe.id, 'white'::player_color, 1500, 1490, 'loss'::game_result FROM game3, john_doe
+  UNION ALL
+  SELECT game3.id, jane_doe.id, 'black'::player_color, 1500, 1510, 'win'::game_result FROM game3, jane_doe;
+
+  -- Update the users' ranks
+  UPDATE users SET rank = 1490 WHERE name = 'John Doe';
+  UPDATE users SET rank = 1510 WHERE name = 'Jane Doe';
+```

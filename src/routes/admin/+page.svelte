@@ -79,12 +79,12 @@
     user_id: z.string().uuid(),
     user_name: z.string(),
     color: Color,
-    rank_at_time_of_play: z.number(),
+    rank_start: z.number(),
     game_result: GameResult,
     opponent_user_id: z.string().uuid(),
     opponent_name: z.string(),
     opponent_color: Color,
-    opponent_rank_at_time_of_play: z.number(),
+    opponent_rank_start: z.number(),
     opponent_game_result: GameResult,
   }); -->
   
