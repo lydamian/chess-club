@@ -22,22 +22,18 @@ CREATE TABLE users (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-
 CREATE TABLE games (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  metadata JSONB,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-CREATE TABLE game_players (
-  game_id UUID REFERENCES games(id) ON DELETE CASCADE,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   color player_color NOT NULL,
   rank_start INTEGER,
   rank_end INTEGER,
   game_result game_result NOT NULL,
-  PRIMARY KEY (game_id, user_id),
+  opponent_user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  opponent_color player_color NOT NULL,
+  opponent_rank_start INTEGER,
+  opponent_rank_end INTEGER,
+  opponent_game_result game_result NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -59,10 +55,5 @@ EXECUTE PROCEDURE update_updated_at_column();
 
 CREATE TRIGGER update_games_updated_at
 BEFORE UPDATE ON games
-FOR EACH ROW
-EXECUTE PROCEDURE update_updated_at_column();
-
-CREATE TRIGGER game_players_updated_at
-BEFORE UPDATE ON game_players
 FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();

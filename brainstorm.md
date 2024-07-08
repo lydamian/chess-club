@@ -169,8 +169,9 @@ Given this postgres schema, please help me generate some fake data.
 Let me explain how this data model works.
 
 We have users stored in the users table.
-we can store games which have a one to many relationship with game_players.
-We are generally using this for a chess ranking app, so 1 game will generally map to two game_players rows where there will be one winner denoted by the game_players.game_result and game_players.colors should be unique.
+we can store games which have a many to one relationship with users.
+Lets say user 1 and user 2 play a chess game then we will create 2 games rows
+one for user 1 and one for user 2.
 
 Can we create two users named John Doe and Jane Doe.
 Lets create 3 games between there where john doe wins 1 and jane doe wins 2. They should both start at rank 1500, and a game win should update their rank +10 and a loss should decrease there rank -10.
@@ -223,3 +224,115 @@ SELECT game3.id, jane_doe.id, 'black'::player_color, 1500, 1510, 'win'::game_res
 -- Update the users' ranks
 UPDATE users SET rank = 1490 WHERE name = 'John Doe';
 UPDATE users SET rank = 1510 WHERE name = 'Jane Doe';
+
+
+
+
+    SELECT
+      u.name AS user_name,
+      u.id as user_id,
+      gp.rank_start,
+      gp.rank_end,
+      gp.color AS color,
+      opponent.id AS opponent_user_id,
+      opponent.name AS opponent_name,
+      opponent_gp.color AS opponent_color,
+      opponent_gp.rank_start AS opponent_rank_start,
+      opponent_gp.game_result as opponent_game_result,
+      opponent_gp.rank_end as opponent_rank_end,
+      games.created_at,
+      gp.game_result as game_result
+    FROM
+      game_players AS gp
+      INNER JOIN users AS u ON gp.user_id = u.id
+      INNER JOIN games ON gp.game_id = games.id
+      INNER JOIN game_players AS opponent_gp ON games.id = opponent_gp.game_id
+      INNER JOIN users AS opponent ON opponent_gp.user_id = opponent.id
+    WHERE
+      gp.user_id = '575cb691-958a-4a28-889f-c094279960f6'
+      AND gp.user_id <> opponent_gp.user_id
+    ORDER BY
+      games.created_at DESC
+
+
+
+
+Write me a postgresql script to insert some mock data
+
+given the following schema
+
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TYPE user_status AS ENUM (
+  'active',
+  'inactive',
+  'banned',
+  'deleted'
+);
+
+-- Enum type for player color
+CREATE TYPE player_color AS ENUM ('white', 'black');
+
+CREATE TYPE game_result AS ENUM ('win', 'loss', 'draw');
+
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT UNIQUE NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  status user_status DEFAULT 'active' NOT NULL,
+  rank INTEGER DEFAULT 1500 NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE games (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  color player_color NOT NULL,
+  rank_start INTEGER,
+  rank_end INTEGER,
+  game_result game_result NOT NULL,
+  opponent_user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  opponent_color player_color NOT NULL,
+  opponent_rank_start INTEGER,
+  opponent_rank_end INTEGER,
+  opponent_game_result game_result NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+-- Create a function that updates the updated_at column
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = now();
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Add triggers to the tables
+CREATE TRIGGER update_users_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE PROCEDURE update_updated_at_column();
+
+CREATE TRIGGER update_games_updated_at
+BEFORE UPDATE ON games
+FOR EACH ROW
+EXECUTE PROCEDURE update_updated_at_column();
+
+Let me explain how it works
+
+this is a chess game database,
+basically we have two tables, users and games
+for any game played between two users, we create 2 records in the games table
+one record for each user,
+and we link the two records with the opponent_user_id column
+
+so if user1 plays againt user2
+we create two records in the games table
+1- user1 record, where user_id is user1.id and opponent_user_id is user2.id
+2- user2 record, where user_id is user2.id and opponent_user_id is user1.id
+
+please add the corresponding type enum casts where necessary
