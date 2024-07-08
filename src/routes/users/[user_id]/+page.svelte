@@ -3,7 +3,7 @@
 	export let data: PageData;
 </script>
 <div>
-	<h1 class="text-2xl font-bold m-2">Johnson</h1>
+	<h1 class="text-2xl font-bold m-2">{data.stats.user.name}</h1>
 
 	<!-- summary stats about a single user -->
 	<div
