@@ -2,14 +2,8 @@
   import GoldTrophy from '$src/components/gold-trophy.svelte'
   import SilverTrophy from '$src/components/silver-trophy.svelte'
   import BronzeTrophy from '$src/components/bronze-trophy.svelte'
-  import {
-    generateMockUser,
-  } from '$lib/data-generators/data-generators';
-
-  const data = {
-    // GET /api/users
-    users: Array.from({ length: 10 }, (_, i) => (generateMockUser())),
-  }
+  import type { PageData } from './$types';
+	export let data: PageData;
 </script>
 
 <div class="px-4 sm:px-6 lg:px-8">
