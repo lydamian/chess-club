@@ -2,9 +2,30 @@ import type { PageServerLoad, Actions } from './$types';
 import { z } from 'zod';
 import { ColorSchena, RankSchema, UserSchema } from '$lib/schemas/schema';
 
-export const load: PageServerLoad = async ({ cookies }) => {
-	return { status: 200, props: { name: 'world' } };
+export const load: PageServerLoad = async ({
+  params,
+  locals: { supabase },
+}) => {
+	const { data: users, error } = await supabase
+		.from('users')
+		.select('*')
+		.eq(
+			'status',
+			'active',
+		)
+		.order('name')
+
+	if (error) {
+		console.error('Error: ', error);
+	} else {
+		console.log('games: ', users);
+	}
+
+	return {
+		users: users ?? [],
+	}
 };
+
 
 const createUserFormDataSchema = UserSchema.partial();
 

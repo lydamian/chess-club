@@ -1,9 +1,6 @@
-<script>
-  import {
-    generateMockUser,
-  } from '$lib/data-generators/data-generators';
-
-  const users = Array.from({ length: 10 }, (_, i) => (generateMockUser()))
+<script lang="ts">
+	import type { PageData } from './$types';
+	export let data: PageData;
 
   const colors = [
     { name: 'White', value: 'white' },
@@ -23,8 +20,8 @@
 <div class="space-y-10 divide-y divide-gray-900/10">
   <div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
     <div class="px-4 sm:px-0">
-      <h2 class="text-base font-semibold leading-7 text-gray-900">Player 1</h2>
-      <p class="mt-1 text-sm leading-6 text-gray-600">The first player</p>
+      <h2 class="text-base font-semibold leading-7 text-gray-900">New User</h2>
+      <p class="mt-1 text-sm leading-6 text-gray-600">Create a user</p>
     </div>
 <!-- 
     const UserSchema = z.object({
@@ -126,7 +123,7 @@
                 bind:value={players[0]}
               >
                 <option>Select a user</option>
-                {#each users as user}
+                {#each data.users as user}
                   <option value={user.id}>{user.name}</option>
                 {/each}
               </select>
@@ -165,7 +162,7 @@
                   bind:value={players[1]}
                 >
                   <option>Select a user</option>
-                  {#each users as user}
+                  {#each data.users as user}
                     <option value={user.id}>{user.name}</option>
                   {/each}
                 </select>
@@ -191,7 +188,7 @@
               <label for="game-result" class="block text-sm font-medium leading-6 text-gray-900">Game Result</label>
               <select id="game-result" name="game-result" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 <option>Draw</option>
-                {#each users.filter((user) => user.id === players[0] || user.id === players[1])
+                {#each data.users.filter((user) => user.id === players[0] || user.id === players[1])
                   as user}
                   <option value={user.id}>{user.name}</option>
                 {/each}
