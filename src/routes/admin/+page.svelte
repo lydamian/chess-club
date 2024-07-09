@@ -23,18 +23,7 @@
       <h2 class="text-base font-semibold leading-7 text-gray-900">New User</h2>
       <p class="mt-1 text-sm leading-6 text-gray-600">Create a user</p>
     </div>
-<!-- 
-    const UserSchema = z.object({
-      id: z.string().uuid(),
-      name: z.string(),
-      email_address: z.string().email(),
-      rank: Rank.default(1500),
-      status: userStatusEnum,
-      created_at: z.date(),
-      updated_at: z.date(),
-    }); -->
-
-    <!-- user profile 1 -->
+    <!-- user form -->
     <form
       class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2"
       method="POST"
@@ -104,7 +93,7 @@
           <div class="col-span-full">
             <div class="relative mt-2">
               <label
-                for="user-1"
+                for="user-1-id"
                 class="block text-sm font-medium leading-6 text-gray-900"
               >
                 Player 1
@@ -117,8 +106,8 @@
                 <a class="link link-primary" href="#">Add a new user above</a>
               </p>
               <select
-                id="user-1"
-                name="user-1"
+                id="user-1-id"
+                name="user-1-id"
                 class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 bind:value={players[0]}
               >
@@ -145,7 +134,7 @@
             <!-- user 2 -->
             <div class="col-span-full">
               <div class="relative mt-2">
-                <label for="user-2" class="block text-sm font-medium leading-6 text-gray-900">
+                <label for="user-2-id" class="block text-sm font-medium leading-6 text-gray-900">
                   Player 2
                 </label>
                 <p
@@ -156,8 +145,8 @@
                   <a class="link link-primary" href="#">Add a new user above</a>
                 </p>
                 <select
-                  id="user-2"
-                  name="user-2"
+                  id="user-2-id"
+                  name="user-2-id"
                   class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   bind:value={players[1]}
                 >

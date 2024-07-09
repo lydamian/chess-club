@@ -30,39 +30,73 @@ export const load: PageServerLoad = async ({
 const createUserFormDataSchema = UserSchema.partial();
 
 export const actions = {
-	create_user: async ({ cookies, request }) => {
+	create_user: async ({
+		request,
+		locals: { supabase },
+	}) => {
 		const data = await request.formData();
 		const email = data.get('email');
 		const name = data.get('name');
 		const rank = Number(data.get('rank'));
 
-		const user = createUserFormDataSchema.parse({
+		// validate the input
+		createUserFormDataSchema.parse({
 			email,
 			name,
 			rank,
 		});
 
-    console.log('[admin/+page.server.js]', 'user', user);
+		const { data: [users], error } = await supabase
+			.from('users')
+			.insert({
+				email,
+				name,
+				rank,
+			})
+			.select();
 
-		return { success: true, user };
+		if (error) {
+			console.error('Error: ', error);
+			return { success: false, user: null }
+		};
+
+		return { success: true, user: users?.[0] };
 	},
+
 	create_game: async ({ request }) => {
 		// TODO register the user
 		const data = await request.formData();
-		const user_1 = data.get('user-1');
-		const user_2 = data.get('user-2');
+		const user_1 = data.get('user-1-id');
+		const user_2 = data.get('user-1-id');
 		const user_1_color = data.get('user-1-color');
 		const user_2_color = data.get('user-2-color');
 		const game_result = data.get('game-result');
 
+		const user_1_start_rank = 0;
+		const user_2_start_rank = 0;
+		const user_1_end_rank = 0;
+		const user_2_end_rank = 0;
+
+		console.log('[admin/+page.server.js]', 'create_game', {
+			user_1,
+			user_2,
+			user_1_color,
+			user_2_color,
+			game_result,
+			user_1_start_rank,
+			user_2_start_rank,
+			user_1_end_rank,
+			user_2_end_rank,
+		})
+
 		// create a zod schema to validate the above inputs
-		const inputValidation = z.object({
-			user_1: z.string().uuid(),
-			user_2: z.string().uuid(),
-			user_1_color: z.string(),
-			user_2_color: z.string(),
-			game_result: z.string(),
-		});
+		// const inputValidation = z.object({
+		// 	user_1: z.string().uuid(),
+		// 	user_2: z.string().uuid(),
+		// 	user_1_color: z.string(),
+		// 	user_2_color: z.string(),
+		// 	game_result: z.string(),
+		// });
 
 		// lets create all the data we need to insert into the database
 		// const game = {

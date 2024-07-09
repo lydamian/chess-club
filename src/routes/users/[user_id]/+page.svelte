@@ -2,30 +2,6 @@
 	import type { PageData } from './$types';
 	export let data: PageData;
 
-	function formatDate(date: Date): string {
-		const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		const day = date.getDay();
-		const monthIndex = date.getMonth();
-		const year = date.getFullYear();
-
-		return monthNames[monthIndex] + ' ' + day + ' ' + year;
-	}
-
-	function getElapsedDays(date: Date): string {
-		// Start of the year
-		const startOfYear = new Date(date.getFullYear(), 0, 1);
-		const elapsedDaysInYear = Math.floor((date.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24));
-
-		// Start of the month
-		const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-		const elapsedDaysInMonth = Math.floor((date.getTime() - startOfMonth.getTime()) / (1000 * 60 * 60 * 24));
-
-		// Start of the day
-		const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-		const elapsedDaysInDay = Math.floor((date.getTime() - startOfDay.getTime()) / (1000 * 60 * 60 * 24));
-
-		return `Joined ${elapsedDaysInYear} years, ${elapsedDaysInMonth} months, and ${elapsedDaysInDay} days ago`;
-	}
 </script>
 <div>
 	<h1 class="text-2xl font-bold m-2">{data.stats.user.name}</h1>
