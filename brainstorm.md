@@ -339,7 +339,7 @@ please add the corresponding type enum casts where necessary
 
 
 % TODOs 07/10/2024
-Fix the draw bug not working,
+Fix the draw bug not working, ✅
 Add validation to the create user and the create_game routes
 
 Make fetching more automatic whenever data changes
