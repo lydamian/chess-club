@@ -336,3 +336,17 @@ we create two records in the games table
 2- user2 record, where user_id is user2.id and opponent_user_id is user1.id
 
 please add the corresponding type enum casts where necessary
+
+
+% TODOs 07/10/2024
+Fix the draw bug not working,
+Add validation to the create user and the create_game routes
+
+Make fetching more automatic whenever data changes
+Alerts on success and on failure in the admin form
+Pagination of 10 users
+Add the score deltas in the user page (mabye the new rank and delta)
+
+Fix all the typescript errors
+
+Test everything alot
