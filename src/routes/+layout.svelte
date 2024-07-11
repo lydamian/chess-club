@@ -5,6 +5,7 @@
 	import { browser } from "$app/environment";
   import { invalidate } from '$app/navigation';
   import { onMount } from 'svelte';
+  import { alertStore, addAlert, removeAlert } from '$src/store';
 
   import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'
   import type { LayoutLoad } from './$types'
@@ -53,6 +54,8 @@
       }
     });
 
+    addAlert("Hello")
+
     return () => data.subscription.unsubscribe();
   });
 
@@ -86,6 +89,46 @@
     text-base-content
   "
 >
+  <!-- global alerts -->
+  <div id="alert">
+    <!-- loop through all alerts -->
+    {#each $alertStore as alert}
+      <div
+        role="alert"
+        class="
+          cursor-pointer
+          alert
+          alert-info
+          info-content
+          hover:alert-success
+        "
+        on:click={() => removeAlert(alert.id)}
+        on:keydown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            removeAlert(alert.id);
+          }
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          class="h-6 w-6 shrink-0 stroke-current"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+        <span>{alert.message}</span>
+      </div>
+    {/each}
+    
+  </div>
+
+  <!-- main -->
   <div class="bg-midnightblue pb-32">
     <nav class="bg-midnightblue">
       <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">

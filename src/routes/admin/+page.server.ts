@@ -24,9 +24,7 @@ export const load: PageServerLoad = async ({
 		.order('name')
 
 	if (error) {
-		console.error('Error: ', error);
-	} else {
-		console.log('games: ', users);
+		console.error(`[admin/page.server/load(...)] Error: `, error);
 	}
 
 	return {
@@ -64,7 +62,11 @@ export const actions = {
 			.select();
 
 		if (error) {
-			console.error('Error: ', error);
+			console.error(`[admin/page.server/create_user(${{
+				email,
+				name,
+				rank,
+			}})]`, error);
 			return { success: false, user: null }
 		};
 
