@@ -68,7 +68,12 @@
 					<tr class={game.game_result === 'win' ? 'bg-success text-success-content' : game.game_result === 'loss' ? 'bg-error text-error-content' : ''}>
 						<td class="max-sm:hidden">{`${game.users.name} (${game.color})`}</td>
 						<td>{`${game.opponent_users.name} (${game.opponent_color})`}</td>
-						<td>{game.game_result}</td>
+						<td>
+							{game.game_result}
+							{game.rank_end}
+							{game.rank_start - game.rank_end > 0 ? ' ↘' : game.rank_start - game.rank_end < 0 ? ' ↗' : ''}
+							{game.game_result != 'draw' ? game.rank_end- game.rank_start: ''}
+						</td>
 					</tr>
 				{/each}
 			</tbody>
