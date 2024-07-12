@@ -6,7 +6,7 @@
 	export let data: PageData;
 </script>
 
-<div class="px-4 sm:px-6 lg:px-8">
+<div class="px-0 md:px-4 lg:px-8">
   <!-- leaderboard -->
   <div class="overflow-x-auto">
     <table class="table table-lg">
