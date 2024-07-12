@@ -17,14 +17,17 @@
   };
 
   let players = [null, null];
-  $: console.log(players);
   
 	export let form: ActionData;
-  $: console.log('form is now', form);
 
   $: if (form?.error) {
     addAlert(form.error);
   }
+
+  $: if(form?.success) {
+    addAlert('Successfully created');
+  }
+
 </script>
 
 <!-- if there are issues -->
@@ -172,11 +175,11 @@
             </div>
           
 
-          <!-- game-result -->
+          <!-- winner_id -->
           <div class="col-span-full">
             <div class="relative mt-2">
-              <label for="game-result" class="block text-sm font-medium leading-6 text-gray-900">Game Result</label>
-              <select id="game-result" name="game-result" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <label for="winner-id" class="block text-sm font-medium leading-6 text-gray-900">Game Result</label>
+              <select id="winner-id" name="winner-id" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 <option value="draw">Draw</option>
                 {#each data.users.filter((user) => user.id === players[0] || user.id === players[1])
                   as user}

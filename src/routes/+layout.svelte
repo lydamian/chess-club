@@ -139,8 +139,7 @@
                   href="/"
                 >
                   <!-- <img class="h-8 w-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"> -->
-                  <img class="h-48 w-auto" src={GoldChessLogo} alt="Your Company">
-                </a>
+                  <a href="/"><img class="h-48 w-auto" src={GoldChessLogo} alt="Your Company"></a>
               </div>
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
@@ -192,7 +191,7 @@
                         </div>
                     </div>
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                      <li><a href="/admin/settings" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a></li>
+                      <!-- <li><a href="/admin/settings" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a></li> -->
                       <li>
                         <button on:click={logout} class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">
                           Sign out
@@ -268,7 +267,7 @@
             </button>
           </div>
           <div class="mt-3 space-y-1 px-2">
-            <a href="/admin/settings" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Settings</a>
+            <!-- <a href="/admin/settings" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Settings</a> -->
             <button
               on:click={logout}
               class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white"

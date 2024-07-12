@@ -21,55 +21,34 @@ const UserSchema = z.object({
   updated_at: z.date(),
 });
 
-const GameSchema = z.object({
+const GamesSchema = z.object({
   id: z.string().uuid(),
-  metadata: z.object({}).optional(), // Assuming metadata is a JSON object
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
-});
-
-const GamePlayer = z.object({
-  game_id: z.string().uuid(),
   user_id: z.string().uuid(),
   color: ColorSchena,
-  rank_start: z.number(),
-  game_result: GameResultSchema,
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
-});
-
-// Combine the schemas to create the final schema
-const UserGameDetailsSchema = GameSchema.extend({
-  user_id: z.string().uuid(),
-  user_name: z.string(),
-  color: ColorSchena,
-  rank_start: z.number(),
+  rank_start: z.number().int().nullable(),
+  rank_end: z.number().int().nullable(),
   game_result: GameResultSchema,
   opponent_user_id: z.string().uuid(),
-  opponent_name: z.string(),
   opponent_color: ColorSchena,
-  opponent_rank_start: z.number(),
+  opponent_rank_start: z.number().int().nullable(),
+  opponent_rank_end: z.number().int().nullable(),
   opponent_game_result: GameResultSchema,
+  created_at: z.date().default(() => new Date()),
+  updated_at: z.date().default(() => new Date()),
 });
-
 
 // types inference
 type User = z.infer<typeof UserSchema>
-type Game = z.infer<typeof GameSchema>
-type GameDetails = z.infer<typeof UserGameDetailsSchema>
+type Games = z.infer<typeof GamesSchema>
 
 export {
   UserSchema,
-  GameSchema,
-  GamePlayer,
-  UserGameDetailsSchema,
   ColorSchena,
   RankSchema,
-  GameResultSchema
+  GamesSchema,
 }
 
 export type {
   User,
-  Game,
-  GameDetails
+  Games,
 }

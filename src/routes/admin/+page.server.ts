@@ -1,6 +1,12 @@
 import type { PageServerLoad, Actions } from './$types';
 import { z } from 'zod';
-import { ColorSchena, RankSchema, UserSchema } from '$lib/schemas/schema';
+import {
+	ColorSchena,
+	RankSchema,
+	UserSchema,
+	GamesSchema,
+} from '$lib/schemas/schema';
+
 import { get_user, update_user } from '$lib/users/gateway';
 import { create_game } from '$lib/games/gateway';
 import { update } from "$src/lib/elo";
@@ -39,6 +45,7 @@ export const load: PageServerLoad = async ({
 
 
 const createUserFormDataSchema = UserSchema.partial();
+const createGameFormDataSchema = GamesSchema.partial();
 
 export const actions = {
 	create_user: async ({
@@ -69,7 +76,7 @@ export const actions = {
 				.insert(user)
 				.select();
 			
-			if (err.message.includes('duplicate')) {
+			if (err?.message.includes('duplicate')) {
 				return fail(StatusCodes.CONFLICT, {
 					success: false,
 					user: null,
@@ -109,31 +116,53 @@ export const actions = {
 		locals: { supabase },
 	}) => {
 		const data = await request.formData();
-		const user_1_id = data.get('user-1-id');
-		const user_2_id = data.get('user-2-id');
-		const user_1_color = data.get('user-1-color');
-		const user_2_color = data.get('user-2-color');
-		const game_result = data.get('game-result');
-
-		// @TODO: validate the user input
+		const game = {
+			user_1_id: data.get('user-1-id'),
+			user_2_id: data.get('user-2-id'),
+			user_1_color: data.get('user-1-color'),
+			user_2_color: data.get('user-2-color'),
+			winner_id: data.get('winner-id'),
+		} as any;
 
 		try {
-			// get our user objects
+			if (game.user_1_id === game.user_2_id) {
+				return fail(400, {
+					success: false,
+					error: 'Users cannot be the same',
+				});
+			}
+			if (game.user_1_color === game.user_2_color) {
+				return fail(400, {
+					success: false,
+					error: 'Colors cannot be the same',
+				});
+			}
+
+			// validate the input
+			const safeParse = createGameFormDataSchema.safeParse(game);
+
+			// if invalid - return the array of ZodIssues
+			if (!safeParse.success) {
+				return fail(400, {
+					validation_errors: safeParse.error.issues
+				});
+			}
+
 			const [
 				user_1,
 				user_2,
 			] = await Promise.all([
-				get_user(user_1_id),
-				get_user(user_2_id)
+				get_user(game.user_1_id),
+				get_user(game.user_2_id)
 			]);
 
 			// check that the users exist
 			if (!user_1) {
-				throw new Error('User not found', user_1_id)
+				throw new Error('User not found', game.user_1_id)
 			}
 	
 			if (!user_2) {
-				throw new Error('User not found', user_2_id)
+				throw new Error('User not found', game.user_2_id)
 			}
 		
 			const user_1_start_rank = user_1.rank;
@@ -144,93 +173,61 @@ export const actions = {
 			const [user_1_end_rank, user_2_end_rank] = update(
 				user_1_start_rank,
 				user_2_start_rank,
-				convert_game_result_to_number(get_game_result_for_user(user_1_id, game_result)),
+				convert_game_result_to_number(get_game_result_for_user(
+					game.user_1_id,
+					game.winner_id
+				)),
 			);
 
-			console.log('[admin/+page.server.js]', 'create_game', {
-				user_1,
-				user_2,
-				user_1_color,
-				user_2_color,
-				game_result,
-				user_1_start_rank,
-				user_2_start_rank,
-				user_1_end_rank,
-				user_2_end_rank,
-			})
-			
 			await Promise.all([
 				update_user({
 					rank: user_1_end_rank,
-					user_id: user_1_id,
+					user_id: game.user_1_id,
 				}),
 				update_user({
 					rank: user_2_end_rank,
-					user_id: user_2_id,
+					user_id: game.user_2_id,
 				}),
 				create_game(
-					user_1_id,
-					user_1_color,
-					user_1_start_rank,
-					user_1_end_rank,
-					user_2_id,
-					user_2_color,
-					user_2_start_rank,
-					user_2_end_rank,
-					game_result,
+					game.user_1_id,
+					game.user_1_color,
+					game.user_1_start_rank,
+					game.user_1_end_rank,
+					game.user_2_id,
+					game.user_2_color,
+					game.user_2_start_rank,
+					game.user_2_end_rank,
+					game.winner_id,
 				),
 				create_game(
-					user_2_id,
-					user_2_color,
-					user_2_start_rank,
-					user_2_end_rank,
-					user_1_id,
-					user_1_color,
-					user_1_start_rank,
-					user_1_end_rank,
-					game_result,
+					game.user_2_id,
+					game.user_2_color,
+					game.user_2_start_rank,
+					game.user_2_end_rank,
+					game.user_1_id,
+					game.user_1_color,
+					game.user_1_start_rank,
+					game.user_1_end_rank,
+					game.winner_id,
 				),
 			])
 
-			// create a zod schema to validate the above inputs
-			// const inputValidation = z.object({
-			// 	user_1: z.string().uuid(),
-			// 	user_2: z.string().uuid(),
-			// 	user_1_color: z.string(),
-			// 	user_2_color: z.string(),
-			// 	game_result: z.string(),
-			// });
+			return {
+				success: true,
+			};	
+			
+		} catch (err) {
+			console.error(
+				`[admin/page.server/create_user(${JSON.stringify(game)})] Error:`,
+				err.message,
+				err.stack
+			);
 
-			// lets create all the data we need to insert into the database
-			// const game = {
-			// 	created_at: new Date(),
-			// 	updated_at: new Date(),
-			// };
-
-			// const gamePlayer1 = {
-			// 	game_id: 'game-1', // @TODO: get this from the created game above or in a tx
-			// 	user_id: user_1_id,
-			// 	color: user_1_color,
-			// 	rank_start: 1500,
-			// 	game_result: game_result,
-			// 	created_at: new Date(),
-			// 	updated_at: new Date(),
-			// };
-
-			// console.log('[admin/+page.server.js]', 'create_game', {
-			// 	user_1,
-			// 	user_2,
-			// 	user_1_color,
-			// 	user_2_color,
-			// 	game_result
-			// });
-
-		} catch (error) {
-			if (error) {
-				console.error(`[users/admin/+page.server/create_game(...): Error: `, error);
-			}
-
-			return { success: false }
+			error(StatusCodes.INTERNAL_SERVER_ERROR, {
+				success: false,
+				user: null,
+				error: err.message,
+			});
 		}
 	},
 } satisfies Actions;
