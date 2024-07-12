@@ -5,10 +5,15 @@ import { get_user, update_user } from '$lib/users/gateway';
 import { create_game } from '$lib/games/gateway';
 import { update } from "$src/lib/elo";
 import {
+	StatusCodes,
+} from 'http-status-codes';
+
+import {
 	convert_game_result_to_number,
 	get_game_result_for_user,
 } from '$lib/games/helpers';
-
+import { fromError } from 'zod-validation-error';
+import { fail, redirect, error } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async ({
   params,
@@ -41,36 +46,62 @@ export const actions = {
 		locals: { supabase },
 	}) => {
 		const data = await request.formData();
-		const email = data.get('email');
-		const name = data.get('name');
-		const rank = Number(data.get('rank'));
 
-		// validate the input
-		createUserFormDataSchema.parse({
-			email,
-			name,
-			rank,
-		});
-
-		const { data: [users], error } = await supabase
-			.from('users')
-			.insert({
-				email,
-				name,
-				rank,
-			})
-			.select();
-
-		if (error) {
-			console.error(`[admin/page.server/create_user(${{
-				email,
-				name,
-				rank,
-			}})]`, error);
-			return { success: false, user: null }
+		const user = {
+			email: data.get('email'),
+			name: data.get('name'),
+			rank: Number(data.get('rank')),
 		};
 
-		return { success: true, user: users?.[0] };
+		try {
+			// validate the input
+			const safeParse = createUserFormDataSchema.safeParse(user);
+
+			// if invalid - return the array of ZodIssues
+			if (!safeParse.success) {
+				return fail(400, {
+					validation_errors: safeParse.error.issues
+				});
+			}
+	
+			const { data, error: err } = await supabase
+				.from('users')
+				.insert(user)
+				.select();
+			
+			if (err.message.includes('duplicate')) {
+				return fail(StatusCodes.CONFLICT, {
+					success: false,
+					user: null,
+					error: 'User already exists',
+				});
+			}
+	
+			if (err) {
+				return fail(StatusCodes.CONFLICT, {
+					success: false,
+					user: null,
+					error: err.message,
+				});
+			};
+	
+			return {
+				success: true,
+				user: data?.[0],
+			};	
+		} catch (err: any) {
+			console.error(
+				`[admin/page.server/create_user(${JSON.stringify(user)})] Error:`,
+				err.message,
+				err.stack
+			);
+
+			error(StatusCodes.CONFLICT, {
+				success: false,
+				user: null,
+				error: err.message,
+			});
+		}
 	},
 
 	create_game: async ({

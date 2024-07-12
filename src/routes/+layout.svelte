@@ -54,8 +54,6 @@
       }
     });
 
-    addAlert("Hello")
-
     return () => data.subscription.unsubscribe();
   });
 

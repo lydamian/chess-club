@@ -1,5 +1,8 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
+  import { addAlert } from '$src/store';
+  import ZodIssues from '$src/components/zod-issues.svelte';
+
 	export let data: PageData;
 
   const colors = [
@@ -15,7 +18,19 @@
 
   let players = [null, null];
   $: console.log(players);
+  
+	export let form: ActionData;
+  $: console.log('form is now', form);
+
+  $: if (form?.error) {
+    addAlert(form.error);
+  }
 </script>
+
+<!-- if there are issues -->
+{#if form?.validation_errors}
+  <ZodIssues issues={form.validation_errors} />
+{/if}
 
 <div class="space-y-10 divide-y divide-gray-900/10">
   <div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
@@ -61,26 +76,12 @@
     </form>
   </div>
 
-  <!-- const UserGameDetailsSchema = GameSchema.extend({
-    user_id: z.string().uuid(),
-    user_name: z.string(),
-    color: Color,
-    rank_start: z.number(),
-    game_result: GameResult,
-    opponent_user_id: z.string().uuid(),
-    opponent_name: z.string(),
-    opponent_color: Color,
-    opponent_rank_start: z.number(),
-    opponent_game_result: GameResult,
-  }); -->
-  
   <!-- game -->
   <div class="grid grid-cols-1 gap-x-8 gap-y-8 pt-10 md:grid-cols-3">
     <div class="px-4 sm:px-0">
       <h2 class="text-base font-semibold leading-7 text-gray-900">Game</h2>
       <p class="mt-1 text-sm leading-6 text-gray-600">Enter a game</p>
     </div>
-
     <form
       class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2"
       method="POST"
