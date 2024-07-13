@@ -82,7 +82,7 @@
 
   const navigation = [
     { name: 'Leaderboard', href: '/' },
-    { name: 'Admin', href: '/admin' },
+    { name: 'Admin', href: '/admin', protected: true },
   ];
 
   let mobileNavbarOpen = false;
@@ -291,7 +291,10 @@
               </svg>
             </button>
           </div>
-          <div class="mt-3 space-y-1 px-2">
+          <div
+            class={`${session ? "": "hidden"} mt-3 space-y-1 px-2`};
+
+          >
             <!-- <a href="/admin/settings" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Settings</a> -->
             <button
               on:click={logout}
