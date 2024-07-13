@@ -274,7 +274,12 @@
             </a>
           {/each}
         </div>
-        <div class="border-t border-gray-700 pb-3 pt-4">
+        <div class={`
+          ${session ? "": "hidden"}
+          border-t border-gray-700 pb-3 pt-4
+          `
+        }
+        >
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
               <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
@@ -292,8 +297,7 @@
             </button>
           </div>
           <div
-            class={`${session ? "": "hidden"} mt-3 space-y-1 px-2`};
-
+            class="dropdown dropdown-bottom dropdown-end"
           >
             <!-- <a href="/admin/settings" class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-accent hover:text-white">Settings</a> -->
             <button
