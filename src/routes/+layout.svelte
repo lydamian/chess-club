@@ -11,6 +11,29 @@
   import type { LayoutLoad } from './$types'
   import { createBrowserClient, createServerClient, isBrowser } from '@supabase/ssr'
 
+  export function clickOutside(node) {
+  
+  const handleClick = event => {
+      if (node && !node.contains(event.target) && !event.defaultPrevented) {
+        node.dispatchEvent(
+          new CustomEvent('click_outside', node)
+        )
+      }
+    }
+
+    document.addEventListener('click', handleClick, true);
+    
+    return {
+      destroy() {
+        document.removeEventListener('click', handleClick, true);
+      }
+    }
+  }
+
+  function handleClickOutside(event) {
+		mobileNavbarOpen = false;
+	}
+
   export const load: LayoutLoad = async ({ fetch, data, depends }) => {
     depends('supabase:auth')
 
@@ -236,6 +259,8 @@
           ${mobileNavbarOpen ? '' : 'hidden'}
         `}
         id="mobile-menu"
+        use:clickOutside
+        on:click_outside={handleClickOutside}
       >
         <div class="space-y-1 px-2 py-3 sm:px-3">
           <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
