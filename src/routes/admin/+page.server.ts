@@ -7,6 +7,8 @@ import {
 	GamesSchema,
 } from '$lib/schemas/schema';
 
+const K_FACTOR = 30;
+
 import { get_user, update_user } from '$lib/users/gateway';
 import { create_game } from '$lib/games/gateway';
 import { update } from "$src/lib/elo";
@@ -173,10 +175,14 @@ export const actions = {
 			const [user_1_end_rank, user_2_end_rank] = update(
 				user_1_start_rank,
 				user_2_start_rank,
-				convert_game_result_to_number(get_game_result_for_user(
-					game.user_1_id,
-					game.winner_id
-				)),
+				{
+					result: convert_game_result_to_number(get_game_result_for_user(
+						game.user_1_id,
+						game.winner_id
+					)),
+					// kFactor @see https://en.wikipedia.org/wiki/Elo_rating_system#:~:text=The%20K%2Dfactor%2C%20in%20the,in%20a%20tournament%20(m).
+					k: K_FACTOR,
+				}
 			);
 
 			await Promise.all([
