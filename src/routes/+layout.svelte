@@ -5,7 +5,10 @@
 	import { browser } from "$app/environment";
   import { invalidate } from '$app/navigation';
   import { onMount } from 'svelte';
-  import { alertStore, addAlert, removeAlert } from '$src/store';
+  import { redirect } from '@sveltejs/kit';
+  import {
+	StatusCodes,
+} from 'http-status-codes';  import { alertStore, addAlert, removeAlert } from '$src/store';
 
   import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'
   import type { LayoutLoad } from './$types'
@@ -71,7 +74,8 @@
   $: ({ session, supabase } = data);
 
   onMount(() => {
-    const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+    const { data } = supabase.auth.onAuthStateChange((event, newSession) => {
+      console.log('[+layout.svelte/onAuthStateChange] event', JSON.stringify(event, null, 2));
       if (newSession?.expires_at !== session?.expires_at) {
         invalidate('supabase:auth');
       }

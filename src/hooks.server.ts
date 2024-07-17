@@ -69,7 +69,9 @@ const authGuard: Handle = async ({ event, resolve }) => {
 
   if (!event.locals.session &&
     event.url.pathname.startsWith('/admin') &&
-    event.url.pathname !== '/admin/auth'
+    event.url.pathname !== '/admin/auth' &&
+    event.url.pathname !== '/admin/auth/recovery' &&
+    event.url.pathname !== '/admin/auth/recovery/password'
   ) {
     return redirect(303, '/admin/auth')
   }

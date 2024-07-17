@@ -350,3 +350,5 @@ Add the score deltas in the user page (mabye the new rank and delta)
 Fix all the typescript errors
 
 Test everything alot
+
+Should I use https://www.dicebear.com/how-to-use/http-api/ to generate random avatar's for everyone
