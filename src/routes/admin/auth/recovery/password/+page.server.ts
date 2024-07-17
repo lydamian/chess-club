@@ -36,46 +36,44 @@ export const actions: Actions = {
     }
 
     try {
-        const result = changePasswordSchema.parse(obj);
+    const result = changePasswordSchema.parse(obj);
 
-        if (result) {
-            // supabase logged the user in, so we can change the users password
-            const { data: user, error } = await supabase.auth.updateUser({
-                password: result.password,
-            });
-
-            if (error) {
-                console.log('supa change pw error', error);
-                return {
-                    errors: [
-                        { field: 'password', message: 'Something went wrong, cant update password' },
-                    ],
-                    data: {},
-                    success: false,
-                };
-            }
-
-            if (user) {
-                return {
-                    data: user,
-                    errors: [],
-                    success: true,
-                };
-            }
-        }
-    } catch (error: any) {
-        try {
-            const { fieldErrors: errors } = error.flatten();
-            console.log('catch error', errors);
-
+    if (result) {
+        // supabase logged the user in, so we can change the users password
+        const { data: user, error } = await supabase.auth.updateUser({
+            password: result.password,
+        }); 
+        if (error) {
+            console.log('supa change pw error', error);
             return {
-                errors: errors,
-                data: obj,
+                errors: [
+                    { field: 'password', message: 'Something went wrong, cant update password' },
+                ],
+                data: {},
                 success: false,
             };
-        } catch (error2) {
-            console.log(error);
+        }   
+        if (user) {
+            return {
+                data: user,
+                errors: [],
+                success: true,
+            };
         }
+    }
+} catch (error: any) {
+    try {
+        const { fieldErrors: errors } = error.flatten();
+        console.log('catch error', errors);
+
+        return {
+            errors: errors,
+            data: obj,
+            success: false,
+        };
+    } catch (error2) {
+        console.log(error);
+    }
     }
   },
 }

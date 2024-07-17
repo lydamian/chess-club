@@ -28,6 +28,8 @@ export const GET = async (event) => {
     }
   }
 
+  console.error('Error verifying OTP', { token_hash, type })
+
   // return the user to an error page with some instructions
   redirectTo.pathname = '/auth/error'
   redirect(303, redirectTo)
