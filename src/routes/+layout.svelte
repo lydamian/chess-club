@@ -79,6 +79,10 @@
       if (newSession?.expires_at !== session?.expires_at) {
         invalidate('supabase:auth');
       }
+
+      if (event === 'PASSWORD_RECOVERY') {
+        console.log('PASSWORD_RECOVERY', session)
+      }
     });
 
     return () => data.subscription.unsubscribe();

@@ -21,14 +21,17 @@ export const GET = async (event) => {
   redirectTo.searchParams.delete('type')
 
   if (token_hash && type) {
-    const { error } = await supabase.auth.verifyOtp({ token_hash, type })
+    const {data: { session }, error } = await supabase.auth.verifyOtp({ token_hash, type })
+
+    console.log('[auth/confirm server]', { token_hash, type }, { session }, error, redirectTo)
     if (!error) {
       redirectTo.searchParams.delete('next')
       redirect(303, redirectTo)
     }
+
+    console.error('Error verifying OTP', { token_hash, type }, error)
   }
 
-  console.error('Error verifying OTP', { token_hash, type })
 
   // return the user to an error page with some instructions
   redirectTo.pathname = '/auth/error'

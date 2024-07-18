@@ -7,6 +7,7 @@ import type { Actions } from './$types'
 
 export const actions: Actions = {
   reset_password_for_email: async ({
+    host,
     request,
     locals: { supabase }
   }) => {
@@ -16,7 +17,12 @@ export const actions: Actions = {
     const {
       data,
       error
-    } = await supabase.auth.resetPasswordForEmail(email)
+    } = await supabase.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo: `${host}/admin/auth/recovery/password`
+      }
+    )
 
     if (!error) {
       return {
