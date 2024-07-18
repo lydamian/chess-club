@@ -33,8 +33,6 @@ export const load: PageServerLoad = async ({
 
     if (userError) {
       console.error('Error: ', userError);
-    } else {
-      console.log('User: ', user);
     }
 
     // Calculate the number of games won, lost, and drawn
