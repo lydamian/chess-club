@@ -23,14 +23,6 @@ export const load: PageServerLoad = async ({
 
     if (error) {
       console.error('Error: ', error);
-    } else {
-      console.log('games: ', games);
-    }
-
-    if (error) {
-      console.error('Error: ', error);
-    } else {
-      console.log('games: ', games);
     }
 
     // Get the user's rank

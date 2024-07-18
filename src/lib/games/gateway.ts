@@ -1,9 +1,9 @@
 
-import { supabase } from "$src/lib/supabaseClient";
 import type { Game } from "$src/lib/schemas/schema";
 import { get_game_result_for_user } from '$src/lib/games/helpers';
 
 const create_game = async (
+  supabase: any,
   user_1_id: string,
   user_1_color: string,
   user_1_start_rank: number,

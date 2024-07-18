@@ -186,15 +186,20 @@ export const actions = {
 			);
 
 			await Promise.all([
-				update_user({
+				update_user(
+					supabase,
+					{
 					rank: user_1_end_rank,
 					user_id: game.user_1_id,
 				}),
-				update_user({
+				update_user(
+					supabase,
+					{
 					rank: user_2_end_rank,
 					user_id: game.user_2_id,
 				}),
 				create_game(
+					supabase,
 					game.user_1_id,
 					game.user_1_color,
 					user_1_start_rank,
@@ -206,6 +211,7 @@ export const actions = {
 					game.winner_id,
 				),
 				create_game(
+					supabase,
 					game.user_2_id,
 					game.user_2_color,
 					user_2_start_rank,
@@ -224,7 +230,7 @@ export const actions = {
 			
 		} catch (err) {
 			console.error(
-				`[admin/page.server/create_user(${JSON.stringify(game)})] Error:`,
+				`[admin/page.server/create_game(${JSON.stringify(game)})] Error:`,
 				err.message,
 				err.stack
 			);

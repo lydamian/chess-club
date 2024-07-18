@@ -16,10 +16,12 @@ const get_user = async (user_id: string): Promise<User> => {
   return data;
 }
 
-const update_user = async ({
-  user_id,
-  rank,
-}: {
+const update_user = async (
+  supabase: any,
+  {
+    user_id,
+    rank,
+  }: {
   user_id: string,
   rank: number;
 }): Promise<User> => {
