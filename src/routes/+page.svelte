@@ -6,18 +6,25 @@
 	export let data: PageData;
 </script>
 
+<div>
+  Games Played 
+  <div class="badge badge-lg badge-secondary cursor-pointer">
+    {`+${data.totalNumberOfGamesPlayed}`}
+  </div>
+</div>
+
 <div class="px-0 md:px-4 lg:px-8">
   <!-- leaderboard -->
   <div class="overflow-x-auto">
     <table class="table table-lg">
       <!-- head -->
-      <!-- <thead>
+      <thead>
         <tr>
-          <th></th>
+          <th>Place</th>
           <th>Name</th>
           <th>Rank</th>
         </tr>
-      </thead> -->
+      </thead>
       <tbody>
         <!-- loop through all data.users -->
         {#each data.users as user, i}
@@ -49,8 +56,10 @@
                 href={`users/${user.id}`}
                 class="link link-primary"
               >
-                {user.name}
+                {`${user.name} `}
               </a>
+              <br />
+              {data?.gameCounts?.[user.id] > 0 ? `(${data?.gameCounts?.[user.id] ?? 0} Games Played)`: ''}
             </td>
             <td>{user.rank}</td>
           </tr>
