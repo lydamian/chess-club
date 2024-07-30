@@ -17,7 +17,16 @@
   };
 
   let players = [null, null];
+  let playerColors = ['white', 'black'];
   
+  $: {
+    if (playerColors[0] === 'white') {
+      playerColors[1] = 'black';
+    } else if (playerColors[0] === 'black') {
+      playerColors[1] = 'white';
+    }
+  }
+
 	export let form: ActionData;
 
   const focusOnUserForm = () => {
@@ -89,16 +98,21 @@
           </div>
 
           <!-- color 1 -->
-          <div class="col-span-full">
+            <div class="col-span-full">
             <div class="relative mt-2">
               <label for="user-1-color" class="block text-sm font-medium leading-6 text-gray-900">Player 1 Color</label>
-              <select id="user-1-color" name="user-1-color" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <select
+                id="user-1-color"
+                name="user-1-color"
+                class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                bind:value={playerColors[0]}
+              >
                 {#each colors as color}
                   <option value={color.value}>{color.name}</option>
                 {/each}
               </select>
             </div>
-          </div>
+            </div>
 
           <!-- user 2 -->
           <div class="col-span-full">
@@ -135,7 +149,13 @@
           <div class="col-span-full">
             <div class="relative mt-2">
               <label for="user-2-color" class="block text-sm font-medium leading-6 text-gray-900">Player 2 Color</label>
-              <select id="user-2-color" name="user-2-color" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <select
+                id="user-2-color"
+                name="user-2-color"
+                class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                bind:value={playerColors[1]}
+                disabled
+              >
                 {#each colors as color}
                   <option value={color.value}>{color.name}</option>
                 {/each}

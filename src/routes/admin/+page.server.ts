@@ -7,7 +7,7 @@ import {
 	GamesSchema,
 } from '$lib/schemas/schema';
 
-const K_FACTOR = 30;
+const K_FACTOR = 42;
 
 import { get_user, update_user } from '$lib/users/gateway';
 import { create_game } from '$lib/games/gateway';

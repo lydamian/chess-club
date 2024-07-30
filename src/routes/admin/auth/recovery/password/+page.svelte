@@ -10,7 +10,6 @@
 
   const { searchParams } = url;
 
-
   const token = searchParams.get('token');
 
   $: if (form?.error) {
@@ -18,7 +17,7 @@
   }
 
   $: if(form?.success) {
-    addAlert('Successfully created');
+    addAlert('Successfully updated');
   }
 </script>
 
