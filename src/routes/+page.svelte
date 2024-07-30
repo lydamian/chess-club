@@ -23,7 +23,6 @@
           <th>Place</th>
           <th>Name</th>
           <th>Rank</th>
-          <th>Games played</th>
         </tr>
       </thead>
       <tbody>
@@ -57,11 +56,12 @@
                 href={`users/${user.id}`}
                 class="link link-primary"
               >
-                {user.name}
+                {`${user.name} `}
               </a>
+              <br />
+              {data?.gameCounts?.[user.id] > 0 ? `(${data?.gameCounts?.[user.id] ?? 0} Games Played)`: ''}
             </td>
             <td>{user.rank}</td>
-            <td>{data?.gameCounts?.[user.id] ?? ''}</td>
           </tr>
         {/each}
       </tbody>
