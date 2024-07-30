@@ -352,3 +352,10 @@ Fix all the typescript errors
 Test everything alot
 
 Should I use https://www.dicebear.com/how-to-use/http-api/ to generate random avatar's for everyone
+
+
+
+07/29/2024
+- Add how many games a user has played
+- Add the total amount of games played on the app
+- Change white and black automatically
