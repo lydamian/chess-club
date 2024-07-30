@@ -19,13 +19,7 @@
   let players = [null, null];
   let playerColors = ['white', 'black'];
   
-  $: {
-    if (playerColors[0] === 'white') {
-      playerColors[1] = 'black';
-    } else if (playerColors[0] === 'black') {
-      playerColors[1] = 'white';
-    }
-  }
+  $: playerColors[0] === 'white' ? playerColors[1] = 'black' : playerColors[1] = 'white';
 
 	export let form: ActionData;
 
